@@ -5,7 +5,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -43,7 +43,6 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             KoinExTheme {
                 val viewModel: MainViewModel = getViewModel()
@@ -85,6 +84,17 @@ fun MealCategories(viewModel: MainViewModel, navigateToDetail: (Category) -> Uni
     ) {
         val state = viewModel.currentState
         //이미지들이 한번에 로드되는 것 처럼 보이려면 isLoading 으로 확인 필요
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(if (viewModel.currentState.visible.visibility) 1f else 0f)
+        ) {
+            items(state.categories.categories) {
+                MealCategory(it, navigateToDetail)
+            }
+        }
         when (state.loadState) {
             is MealContract.MealListState.Loading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -92,15 +102,7 @@ fun MealCategories(viewModel: MainViewModel, navigateToDetail: (Category) -> Uni
 
             is MealContract.MealListState.Success -> {
                 Log.d("MealCategories", "Success")
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    items(state.categories.categories) {
-                        MealCategory(it, navigateToDetail)
-                    }
-                }
+                viewModel.setVisible()
             }
 
             is MealContract.MealListState.Before -> {

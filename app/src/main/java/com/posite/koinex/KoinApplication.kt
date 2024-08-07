@@ -6,7 +6,7 @@ import android.content.Context
 import androidx.annotation.StringRes
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.posite.koinex.di.RetrofitModule
+import com.posite.koinex.di.KoinModule
 import com.posite.koinex.util.NetworkChecker
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -18,15 +18,14 @@ class KoinApplication : Application(), DefaultLifecycleObserver {
         context = applicationContext
         networkConnectionChecker = NetworkChecker(context)
 
+
+        // 런타임에서 의존성 주입을 사용할 수 있도록 Application context와 Koin module 등록
         startKoin {
             androidContext(this@KoinApplication)
-            modules(RetrofitModule.moshiModule)
-            modules(RetrofitModule.okhttpModule)
-            modules(RetrofitModule.mealRetrofitModule)
-            modules(RetrofitModule.mealDataSource)
-            modules(RetrofitModule.mealRepositoryModule)
-            modules(RetrofitModule.mealUseCaseModule)
-            modules(RetrofitModule.mealViewModelModule)
+            modules(KoinModule.mealNetworkModule)
+            modules(KoinModule.mealDataModule)
+            modules(KoinModule.mealDomainModule)
+            modules(KoinModule.mealViewModelModule)
         }
     }
 

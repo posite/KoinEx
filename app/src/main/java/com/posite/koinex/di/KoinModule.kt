@@ -16,23 +16,23 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
+/*
 
-object RetrofitModule {
-    val moshiModule = module {
+    Moshi, OkHttp, Retrofit, Service, DataSource, Repository, UseCase, ViewModel의
+    의존성 주입을 위한 Koin module
+
+ */
+
+object KoinModule {
+    val mealNetworkModule = module {
         single<Moshi> {
             Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .build()
         }
-    }
-
-    val okhttpModule = module {
         single<OkHttpClient> {
             OkHttpClient.Builder().build()
         }
-    }
-
-    val mealRetrofitModule = module {
         single<Retrofit> {
             Retrofit.Builder()
                 .baseUrl(getString(R.string.meal_url))
@@ -44,21 +44,19 @@ object RetrofitModule {
         single<MealService> {
             get<Retrofit>().create(MealService::class.java)
         }
+
     }
 
-    val mealDataSource = module {
+    val mealDataModule = module {
         single<MealDataSource> {
             MealDataSource(get())
         }
-    }
-
-    val mealRepositoryModule = module {
         single<MealRepository> {
             MealRepositoryImpl(get())
         }
     }
 
-    val mealUseCaseModule = module {
+    val mealDomainModule = module {
         single<GetCategoriesUseCase> {
             GetCategoriesUseCase(get())
         }
