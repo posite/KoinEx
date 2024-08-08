@@ -1,4 +1,4 @@
-package com.posite.koinex.data.remote.model
+package com.posite.koinex.data.remote.model.category
 
 import android.os.Parcelable
 import com.squareup.moshi.Json

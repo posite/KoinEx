@@ -1,33 +1,33 @@
 package com.posite.koinex.ui.presenter.main
 
-import com.posite.koinex.data.remote.model.Category
+import com.posite.koinex.data.remote.model.category.Category
 import com.posite.koinex.ui.presenter.base.UiEffect
 import com.posite.koinex.ui.presenter.base.UiEvent
 import com.posite.koinex.ui.presenter.base.UiState
 
-class MealContract {
-    sealed class Event : UiEvent {
-        object GetCategories : Event()
-        object SetVisible : Event()
+class MainContract {
+    sealed class MainEvent : UiEvent {
+        object GetCategories : MainEvent()
+        object SetVisible : MainEvent()
     }
 
-    sealed class MealListState {
-        object Before : MealListState()
-        object Loading : MealListState()
-        object Success : MealListState()
-        data class Visible(val visibility: Boolean) : MealListState()
-        data class Error(val message: String) : MealListState()
-        data class Meals(val categories: List<Category>) : MealListState()
+    sealed class CategoryListState {
+        object Before : CategoryListState()
+        object Loading : CategoryListState()
+        object Success : CategoryListState()
+        data class Visible(val visibility: Boolean) : CategoryListState()
+        data class Error(val message: String) : CategoryListState()
+        data class Categories(val categories: List<Category>) : CategoryListState()
     }
 
-    sealed class Effect : UiEffect {
-        object ShowError : Effect()
+    sealed class CategoryEffect : UiEffect {
+        object ShowError : CategoryEffect()
     }
 
-    data class State(
-        val loadState: MealListState,
-        val visible: MealListState.Visible,
-        val categories: MealListState.Meals
+    data class CategoryState(
+        val loadState: CategoryListState,
+        val visible: CategoryListState.Visible,
+        val categories: CategoryListState.Categories
     ) : UiState
 
 }

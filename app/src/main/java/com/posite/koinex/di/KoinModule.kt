@@ -2,16 +2,22 @@ package com.posite.koinex.di
 
 import com.posite.koinex.KoinApplication.Companion.getString
 import com.posite.koinex.R
-import com.posite.koinex.data.datasource.MealDataSource
-import com.posite.koinex.data.remote.repository.MealRepositoryImpl
+import com.posite.koinex.data.datasource.category.CategoryDataSource
+import com.posite.koinex.data.datasource.meal.MealDataSource
+import com.posite.koinex.data.remote.repository.category.CategoryRepositoryImpl
+import com.posite.koinex.data.remote.repository.meal.MealRepositoryImpl
 import com.posite.koinex.data.remote.service.MealService
-import com.posite.koinex.domain.repository.MealRepository
-import com.posite.koinex.domain.usecase.GetCategoriesUseCase
+import com.posite.koinex.domain.repository.category.CategoryRepository
+import com.posite.koinex.domain.repository.meal.MealRepository
+import com.posite.koinex.domain.usecase.category.GetCategoriesUseCase
+import com.posite.koinex.domain.usecase.meal.GetMealByCategoryUseCase
 import com.posite.koinex.ui.presenter.main.MainViewModel
+import com.posite.koinex.ui.presenter.main.MealViewModel
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -33,7 +39,7 @@ object KoinModule {
         single<OkHttpClient> {
             OkHttpClient.Builder().build()
         }
-        single<Retrofit> {
+        single<Retrofit>(named(getString(R.string.meal_qualifier))) {
             Retrofit.Builder()
                 .baseUrl(getString(R.string.meal_url))
                 .client(get())
@@ -41,28 +47,52 @@ object KoinModule {
 
                 .build()
         }
-        single<MealService> {
-            get<Retrofit>().create(MealService::class.java)
+        single<MealService>(named(getString(R.string.meal_qualifier))) {
+            get<Retrofit>(named(getString(R.string.meal_qualifier))).create(MealService::class.java)
         }
 
     }
 
     val mealDataModule = module {
-        single<MealDataSource> {
-            MealDataSource(get())
+        single<CategoryDataSource>(named(getString(R.string.category_qualifier))) {
+            CategoryDataSource(get(named(getString(R.string.meal_qualifier))))
         }
-        single<MealRepository> {
-            MealRepositoryImpl(get())
+        single<CategoryRepository>(named(getString(R.string.category_qualifier))) {
+            CategoryRepositoryImpl(get(named(getString(R.string.category_qualifier))))
+        }
+
+        single<MealDataSource>(named(getString(R.string.meal_qualifier))) {
+            MealDataSource(get(named(getString(R.string.meal_qualifier))))
+        }
+        single<MealRepository>(named(getString(R.string.meal_qualifier))) {
+            MealRepositoryImpl(get(named(getString(R.string.meal_qualifier))))
         }
     }
 
     val mealDomainModule = module {
-        single<GetCategoriesUseCase> {
-            GetCategoriesUseCase(get())
+        single<GetCategoriesUseCase>(named(getString(R.string.category_qualifier))) {
+            GetCategoriesUseCase(get(named(getString(R.string.category_qualifier))))
+        }
+
+        single<GetMealByCategoryUseCase>(named(getString(R.string.meal_qualifier))) {
+            GetMealByCategoryUseCase(get(named(getString(R.string.meal_qualifier))))
         }
     }
 
     val mealViewModelModule = module {
-        viewModel<MainViewModel> { MainViewModel(get()) }
+        viewModel<MainViewModel>(named(getString(R.string.category_qualifier))) {
+            MainViewModel(
+                get(
+                    named(getString(R.string.category_qualifier))
+                )
+            )
+        }
+        viewModel<MealViewModel>(named(getString(R.string.meal_qualifier))) {
+            MealViewModel(
+                get(
+                    named(getString(R.string.meal_qualifier))
+                )
+            )
+        }
     }
 }
