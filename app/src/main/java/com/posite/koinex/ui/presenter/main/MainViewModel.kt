@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.posite.koinex.domain.usecase.category.GetCategoriesUseCase
 import com.posite.koinex.ui.presenter.base.BaseViewModel
 import com.posite.koinex.util.onSuccess
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val useCase: GetCategoriesUseCase) :
@@ -41,7 +40,6 @@ class MainViewModel(private val useCase: GetCategoriesUseCase) :
                 }
 
                 is MainContract.MainEvent.SetVisible -> {
-                    delay(100)
                     setState { copy(visible = MainContract.CategoryListState.Visible(true)) }
                 }
             }

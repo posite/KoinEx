@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.posite.koinex.domain.usecase.meal.GetMealByCategoryUseCase
 import com.posite.koinex.ui.presenter.base.BaseViewModel
 import com.posite.koinex.util.onSuccess
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
@@ -21,6 +20,7 @@ class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
         viewModelScope.launch {
             when (event) {
                 is MealContract.MealEvent.GetMeals -> {
+                    setState { copy(loadState = MealContract.MealListState.LoadState.Loading) }
                     getMealsUseCase(event.category).collect { result ->
                         result.onSuccess { mealResponse ->
                             setState {
@@ -34,7 +34,6 @@ class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
                 }
 
                 is MealContract.MealEvent.SetVisible -> {
-                    delay(100)
                     setState { copy(visible = MealContract.MealListState.Visible(true)) }
                 }
 
@@ -44,6 +43,14 @@ class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
                             loadState = MealContract.MealListState.LoadState.Before,
                             visible = MealContract.MealListState.Visible(false),
                             meals = MealContract.MealListState.Meals(emptyList())
+                        )
+                    }
+                }
+
+                is MealContract.MealEvent.SetInit -> {
+                    setState {
+                        copy(
+                            loadState = MealContract.MealListState.LoadState.Init,
                         )
                     }
                 }
@@ -61,5 +68,9 @@ class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
 
     fun clearAll() {
         setEvent(MealContract.MealEvent.ClearAll)
+    }
+
+    fun setInit() {
+        setEvent(MealContract.MealEvent.SetInit)
     }
 }

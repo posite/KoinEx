@@ -88,4 +88,7 @@ dependencies {
 
     //coil
     implementation(libs.coil.compose)
+
+    //animation
+    implementation(libs.compose.animation)
 }
