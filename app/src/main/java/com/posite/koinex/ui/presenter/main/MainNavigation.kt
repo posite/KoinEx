@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -24,36 +23,36 @@ fun MainNavigation(
     mealViewModel: MealViewModel,
     navController: NavHostController
 ) {
-    SharedTransitionLayout {
-        NavHost(navController = navController, startDestination = Screens.CategoryScreen.route) {
-            composable(
-                route = Screens.CategoryScreen.route,
-                //enterTransition = enterTransition,
-                //exitTransition = exitTransition
-            ) {
-                CategoriesScreen(mainViewModel, this@SharedTransitionLayout) {
-                    navController.currentBackStackEntry?.savedStateHandle?.set("category", it)
-                    Log.d("Category", "category: $it")
-                    navController.navigate(Screens.MealScreen.route)
-                }
+    NavHost(navController = navController, startDestination = Screens.CategoryScreen.route) {
+        composable(
+            route = Screens.CategoryScreen.route,
+            //enterTransition = enterTransition,
+            //exitTransition = exitTransition
+        ) {
+            CategoriesScreen(mainViewModel) {
+                mainViewModel.setInvisible()
+                navController.currentBackStackEntry?.savedStateHandle?.set("category", it)
+                Log.d("Category", "category: ${it.strCategory}")
+                navController.navigate(Screens.MealScreen.route)
+                mealViewModel.setBefore()
             }
-            composable(
-                route = Screens.MealScreen.route,
-                //enterTransition = enterTransition,
-                //exitTransition = exitTransition
+        }
+        composable(
+            route = Screens.MealScreen.route,
+            //enterTransition = enterTransition,
+            //exitTransition = exitTransition
+        ) {
+            val category =
+                navController.previousBackStackEntry?.savedStateHandle?.get<CategoryDto>("category")
+                    ?: CategoryDto("", "", "")
+            Log.d("Detail", "category ${category.strCategory}")
+            MealScreen(
+                category = category.strCategory,
+                mealViewModel = mealViewModel
             ) {
-                val category =
-                    navController.previousBackStackEntry?.savedStateHandle?.get<CategoryDto>("category")
-                        ?: CategoryDto("", "", "")
-                Log.d("Detail", "category: $category")
-                MealScreen(
-                    category = category.strCategory,
-                    mealViewModel = mealViewModel,
-                    this@SharedTransitionLayout
-                ) {
-                    navController.popBackStack()
-                    mealViewModel.clearAll()
-                }
+                navController.popBackStack()
+                mainViewModel.setVisible()
+                mealViewModel.clearAll()
             }
         }
     }

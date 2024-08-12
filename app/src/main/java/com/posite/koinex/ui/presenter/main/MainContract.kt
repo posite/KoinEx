@@ -9,13 +9,15 @@ class MainContract {
     sealed class MainEvent : UiEvent {
         object GetCategories : MainEvent()
         object SetVisible : MainEvent()
+        object SetInvisible : MainEvent()
     }
 
     sealed class CategoryListState {
         object Before : CategoryListState()
         object Loading : CategoryListState()
         object Success : CategoryListState()
-        data class Visible(val visibility: Boolean) : CategoryListState()
+        object Visible : CategoryListState()
+        object Invisible : CategoryListState()
         data class Error(val message: String) : CategoryListState()
         data class Categories(val categories: List<CategoryDto>) : CategoryListState()
     }
@@ -26,7 +28,6 @@ class MainContract {
 
     data class CategoryState(
         val loadState: CategoryListState,
-        val visible: CategoryListState.Visible,
         val categories: CategoryListState.Categories
     ) : UiState
 

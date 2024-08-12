@@ -1,6 +1,7 @@
 package com.posite.koinex.ui.presenter.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
@@ -8,7 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.posite.koinex.R
 import com.posite.koinex.ui.theme.KoinExTheme
-import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.koin.core.qualifier.named
 
 class MainActivity : ComponentActivity() {
@@ -21,10 +22,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             KoinExTheme {
                 navHostController = rememberNavController()
-                categoryViewModel = getViewModel(named(getString(R.string.category_qualifier)))
-                mealViewModel = getViewModel(named(getString(R.string.meal_qualifier)))
-                MainNavigation(categoryViewModel, mealViewModel, navHostController)
+                categoryViewModel = koinViewModel(named(getString(R.string.category_qualifier)))
+                mealViewModel = koinViewModel(named(getString(R.string.meal_qualifier)))
                 onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+                MainNavigation(categoryViewModel, mealViewModel, navHostController)
             }
         }
     }
@@ -32,9 +33,11 @@ class MainActivity : ComponentActivity() {
     private val onBackPressedCallback: OnBackPressedCallback =
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                Log.d("MainActivity", "${navHostController.currentDestination?.route}")
                 if (navHostController.currentDestination?.route == Screens.MealScreen.route) {
-                    mealViewModel.clearAll()
+                    categoryViewModel.setVisible()
                     navHostController.popBackStack()
+                    mealViewModel.clearAll()
                 }
             }
         }

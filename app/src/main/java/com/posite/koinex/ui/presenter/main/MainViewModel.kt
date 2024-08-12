@@ -12,7 +12,6 @@ class MainViewModel(private val useCase: GetCategoriesUseCase) :
     override fun createInitialState(): MainContract.CategoryState {
         return MainContract.CategoryState(
             MainContract.CategoryListState.Before,
-            MainContract.CategoryListState.Visible(false),
             MainContract.CategoryListState.Categories(emptyList())
         )
     }
@@ -25,7 +24,7 @@ class MainViewModel(private val useCase: GetCategoriesUseCase) :
                     Log.d("MainViewModel", "GetCategories")
                     useCase().collect { result ->
                         result.onSuccess { categories ->
-                            Log.d("MainViewModel", "Success: $categories")
+                            Log.d("MainViewModel", "Success")
                             setState {
                                 copy(
                                     loadState = MainContract.CategoryListState.Success,
@@ -40,7 +39,11 @@ class MainViewModel(private val useCase: GetCategoriesUseCase) :
                 }
 
                 is MainContract.MainEvent.SetVisible -> {
-                    setState { copy(visible = MainContract.CategoryListState.Visible(true)) }
+                    setState { copy(loadState = MainContract.CategoryListState.Visible) }
+                }
+
+                is MainContract.MainEvent.SetInvisible -> {
+                    setState { copy(loadState = MainContract.CategoryListState.Invisible) }
                 }
             }
         }
@@ -53,6 +56,10 @@ class MainViewModel(private val useCase: GetCategoriesUseCase) :
 
     fun setVisible() {
         setEvent(MainContract.MainEvent.SetVisible)
+    }
+
+    fun setInvisible() {
+        setEvent(MainContract.MainEvent.SetInvisible)
     }
 
 }

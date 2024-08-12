@@ -1,5 +1,6 @@
 package com.posite.koinex.ui.presenter.main
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.posite.koinex.domain.model.meal.MealsModel
 import com.posite.koinex.domain.usecase.meal.GetMealByCategoryUseCase
@@ -12,7 +13,6 @@ class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
     override fun createInitialState(): MealContract.MealState {
         return MealContract.MealState(
             MealContract.MealListState.LoadState.Before,
-            MealContract.MealListState.Visible(false),
             MealContract.MealListState.Meals(MealsModel.getEmptyMeals())
         )
     }
@@ -35,23 +35,23 @@ class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
                 }
 
                 is MealContract.MealEvent.SetVisible -> {
-                    setState { copy(visible = MealContract.MealListState.Visible(true)) }
+                    setState { copy(loadState = MealContract.MealListState.LoadState.Visible) }
                 }
 
                 is MealContract.MealEvent.ClearAll -> {
+                    Log.d("MealViewModel", "ClearAll")
                     setState {
                         copy(
-                            loadState = MealContract.MealListState.LoadState.Before,
-                            visible = MealContract.MealListState.Visible(false),
+                            loadState = MealContract.MealListState.LoadState.Invisible,
                             meals = MealContract.MealListState.Meals(MealsModel.getEmptyMeals())
                         )
                     }
                 }
 
-                is MealContract.MealEvent.SetInit -> {
+                is MealContract.MealEvent.SetBefore -> {
                     setState {
                         copy(
-                            loadState = MealContract.MealListState.LoadState.Init,
+                            loadState = MealContract.MealListState.LoadState.Before,
                         )
                     }
                 }
@@ -71,7 +71,7 @@ class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
         setEvent(MealContract.MealEvent.ClearAll)
     }
 
-    fun setInit() {
-        setEvent(MealContract.MealEvent.SetInit)
+    fun setBefore() {
+        setEvent(MealContract.MealEvent.SetBefore)
     }
 }

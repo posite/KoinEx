@@ -1,13 +1,6 @@
 package com.posite.koinex.ui.presenter.main
 
 import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,8 +19,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -39,91 +30,75 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.posite.koinex.domain.model.meal.MealModel
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MealScreen(
     category: String,
     mealViewModel: MealViewModel,
-    scope: SharedTransitionScope,
     onBack: () -> Unit
 ) {
-    val visible = remember {
-        mutableStateOf(true)
-    }
-    with(scope) {
-        AnimatedVisibility(
-            visible = true,
-        ) {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = {
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = {
-                                visible.value = false
-                                onBack()
-                            }) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = "Back"
-                                )
-                            }
-                        })
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
                 },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 24.dp)
-                    .sharedBounds(
-                        rememberSharedContentState(key = "category-${category}"),
-                        animatedVisibilityScope = this@AnimatedVisibility,
-                        enter = fadeIn() + scaleIn(),
-                        exit = fadeOut() + scaleOut(),
-                        resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
-                    )
-
-            ) { innerPadding ->
-                val state = mealViewModel.currentState
-                //이미지들이 한번에 로드되는 것 처럼 보이려면 isLoading 으로 확인 필요
-
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .alpha(if (mealViewModel.currentState.visible.visibility) 1f else 0f)
-                ) {
-                    items(state.meals.meals.meals) {
-                        MealList(it)
+                navigationIcon = {
+                    IconButton(onClick = {
+                        onBack()
+                    }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
                     }
-                }
-                when (state.loadState) {
-                    is MealContract.MealListState.LoadState.Loading -> {
-                        CircularProgressIndicator()
-                    }
+                })
+        },
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 24.dp)
 
-                    is MealContract.MealListState.LoadState.Success -> {
-                        Log.d("MealScreen", "Success")
-                        mealViewModel.setVisible()
-                    }
+    ) { innerPadding ->
+        val state = mealViewModel.currentState
+        //이미지들이 한번에 로드되는 것 처럼 보이려면 isLoading 으로 확인 필요
 
-                    is MealContract.MealListState.LoadState.Before -> {
-                        if (visible.value) {
-                            mealViewModel.setInit()
-                            Log.d("MealScreen", "Before")
-                        }
-
-                    }
-
-                    is MealContract.MealListState.LoadState.Init -> {
-                        Log.d("MealScreen", "Init")
-                        mealViewModel.getMeals(category)
-                    }
-                }
-
-
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .alpha(if (mealViewModel.currentState.loadState is MealContract.MealListState.LoadState.Visible) 1f else 0f)
+        ) {
+            items(state.meals.meals.meals) {
+                MealList(it)
             }
         }
+        Log.d("MealScreen", "state: ${state.loadState}")
+        when (state.loadState) {
+            is MealContract.MealListState.LoadState.Loading -> {
+                Log.d("MealScreen", "Loading")
+                CircularProgressIndicator()
+            }
+
+            is MealContract.MealListState.LoadState.Success -> {
+                Log.d("MealScreen", "Success")
+                mealViewModel.setVisible()
+            }
+
+            is MealContract.MealListState.LoadState.Before -> {
+                Log.d("MealScreen", "Before")
+                mealViewModel.getMeals(category)
+            }
+
+            is MealContract.MealListState.LoadState.Visible -> {
+                Log.d("MealScreen", "Visible")
+            }
+
+            is MealContract.MealListState.LoadState.Invisible -> {
+                Log.d("MealScreen", "Invisible")
+            }
+        }
+
+
     }
 }
 

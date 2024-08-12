@@ -14,7 +14,7 @@ class GetCategoriesUseCase(private val repository: CategoryRepository) {
     suspend operator fun invoke() = flow<DataResult<CategoryResponse>> {
         try {
             emit(repository.getCategories().onSuccess {
-                Log.d("GetCategoriesUseCase", "Success: $it")
+                //Log.d("GetCategoriesUseCase", "Success: $it")
                 it
             }.onFail {
                 Log.e("GetCategoriesUseCase", "Error: $it")

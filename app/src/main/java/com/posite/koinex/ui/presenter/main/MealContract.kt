@@ -8,7 +8,7 @@ import com.posite.koinex.ui.presenter.base.UiState
 class MealContract {
     sealed class MealEvent : UiEvent {
         data class GetMeals(val category: String) : MealEvent()
-        object SetInit : MealEvent()
+        object SetBefore : MealEvent()
         object SetVisible : MealEvent()
         object ClearAll : MealEvent()
     }
@@ -18,10 +18,10 @@ class MealContract {
             object Before : LoadState()
             object Loading : LoadState()
             object Success : LoadState()
-            object Init : LoadState()
+            object Visible : LoadState()
+            object Invisible : LoadState()
         }
 
-        data class Visible(val visibility: Boolean) : MealListState()
         data class Error(val message: String) : MealListState()
         data class Meals(val meals: MealsModel) : MealListState()
     }
@@ -32,7 +32,6 @@ class MealContract {
 
     data class MealState(
         val loadState: MealListState.LoadState,
-        val visible: MealListState.Visible,
         val meals: MealListState.Meals
     ) : UiState
 }
