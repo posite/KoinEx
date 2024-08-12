@@ -1,7 +1,7 @@
 package com.posite.koinex.domain.usecase.meal
 
 import com.posite.koinex.domain.repository.meal.MealRepository
-import com.posite.koinex.util.onSuccess
+import com.posite.koinex.util.network.onSuccess
 import kotlinx.coroutines.flow.flow
 
 class GetMealByCategoryUseCase(private val repository: MealRepository) {

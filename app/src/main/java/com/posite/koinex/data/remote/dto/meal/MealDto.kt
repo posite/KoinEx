@@ -1,4 +1,4 @@
-package com.posite.koinex.data.remote.model.meal
+package com.posite.koinex.data.remote.dto.meal
 
 import android.os.Parcelable
 import com.squareup.moshi.Json
@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @JsonClass(generateAdapter = true)
-data class Meal(
+data class MealDto(
     @Json(name = "idMeal")
     val idMeal: String,
     @Json(name = "strMeal")

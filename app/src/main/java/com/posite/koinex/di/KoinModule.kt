@@ -13,6 +13,7 @@ import com.posite.koinex.domain.usecase.category.GetCategoriesUseCase
 import com.posite.koinex.domain.usecase.meal.GetMealByCategoryUseCase
 import com.posite.koinex.ui.presenter.main.MainViewModel
 import com.posite.koinex.ui.presenter.main.MealViewModel
+import com.posite.koinex.util.mapper.MealMapper
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -64,8 +65,15 @@ object KoinModule {
         single<MealDataSource>(named(getString(R.string.meal_qualifier))) {
             MealDataSource(get(named(getString(R.string.meal_qualifier))))
         }
+
+        single<MealMapper>(named(getString(R.string.meal_qualifier))) {
+            MealMapper()
+        }
         single<MealRepository>(named(getString(R.string.meal_qualifier))) {
-            MealRepositoryImpl(get(named(getString(R.string.meal_qualifier))))
+            MealRepositoryImpl(
+                get(named(getString(R.string.meal_qualifier))),
+                get((named(getString(R.string.meal_qualifier))))
+            )
         }
     }
 

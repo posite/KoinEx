@@ -1,4 +1,4 @@
-package com.posite.koinex.util
+package com.posite.koinex.util.network
 
 import android.content.Context
 import android.net.ConnectivityManager

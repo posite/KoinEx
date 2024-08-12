@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.posite.koinex.domain.usecase.category.GetCategoriesUseCase
 import com.posite.koinex.ui.presenter.base.BaseViewModel
-import com.posite.koinex.util.onSuccess
+import com.posite.koinex.util.network.onSuccess
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val useCase: GetCategoriesUseCase) :

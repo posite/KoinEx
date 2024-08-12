@@ -1,9 +1,10 @@
 package com.posite.koinex.ui.presenter.main
 
 import androidx.lifecycle.viewModelScope
+import com.posite.koinex.domain.model.meal.MealsModel
 import com.posite.koinex.domain.usecase.meal.GetMealByCategoryUseCase
 import com.posite.koinex.ui.presenter.base.BaseViewModel
-import com.posite.koinex.util.onSuccess
+import com.posite.koinex.util.network.onSuccess
 import kotlinx.coroutines.launch
 
 class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
@@ -12,7 +13,7 @@ class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
         return MealContract.MealState(
             MealContract.MealListState.LoadState.Before,
             MealContract.MealListState.Visible(false),
-            MealContract.MealListState.Meals(emptyList())
+            MealContract.MealListState.Meals(MealsModel.getEmptyMeals())
         )
     }
 
@@ -22,11 +23,11 @@ class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
                 is MealContract.MealEvent.GetMeals -> {
                     setState { copy(loadState = MealContract.MealListState.LoadState.Loading) }
                     getMealsUseCase(event.category).collect { result ->
-                        result.onSuccess { mealResponse ->
+                        result.onSuccess { meals ->
                             setState {
                                 copy(
                                     loadState = MealContract.MealListState.LoadState.Success,
-                                    meals = MealContract.MealListState.Meals(mealResponse.meals)
+                                    meals = MealContract.MealListState.Meals(meals = meals)
                                 )
                             }
                         }
@@ -42,7 +43,7 @@ class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
                         copy(
                             loadState = MealContract.MealListState.LoadState.Before,
                             visible = MealContract.MealListState.Visible(false),
-                            meals = MealContract.MealListState.Meals(emptyList())
+                            meals = MealContract.MealListState.Meals(MealsModel.getEmptyMeals())
                         )
                     }
                 }

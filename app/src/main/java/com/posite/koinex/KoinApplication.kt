@@ -7,7 +7,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.posite.koinex.di.KoinModule
-import com.posite.koinex.util.NetworkChecker
+import com.posite.koinex.util.network.NetworkChecker
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

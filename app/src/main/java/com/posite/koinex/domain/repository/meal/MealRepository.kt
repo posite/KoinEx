@@ -1,8 +1,8 @@
 package com.posite.koinex.domain.repository.meal
 
-import com.posite.koinex.data.remote.model.meal.MealResopnse
-import com.posite.koinex.util.DataResult
+import com.posite.koinex.domain.model.meal.MealsModel
+import com.posite.koinex.util.network.DataResult
 
 interface MealRepository {
-    suspend fun getMealsByCategory(category: String): DataResult<MealResopnse>
+    suspend fun getMealsByCategory(category: String): DataResult<MealsModel>
 }

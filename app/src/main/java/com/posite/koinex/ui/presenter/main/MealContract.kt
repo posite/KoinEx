@@ -1,6 +1,6 @@
 package com.posite.koinex.ui.presenter.main
 
-import com.posite.koinex.data.remote.model.meal.Meal
+import com.posite.koinex.domain.model.meal.MealsModel
 import com.posite.koinex.ui.presenter.base.UiEffect
 import com.posite.koinex.ui.presenter.base.UiEvent
 import com.posite.koinex.ui.presenter.base.UiState
@@ -23,7 +23,7 @@ class MealContract {
 
         data class Visible(val visibility: Boolean) : MealListState()
         data class Error(val message: String) : MealListState()
-        data class Meals(val meals: List<Meal>) : MealListState()
+        data class Meals(val meals: MealsModel) : MealListState()
     }
 
     sealed class MealEffect : UiEffect {

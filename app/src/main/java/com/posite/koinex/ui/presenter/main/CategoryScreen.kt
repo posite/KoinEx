@@ -31,14 +31,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.posite.koinex.data.remote.model.category.Category
+import com.posite.koinex.data.remote.dto.category.CategoryDto
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CategoriesScreen(
     viewModel: MainViewModel,
     scope: SharedTransitionScope,
-    navigateToDetail: (Category) -> Unit
+    navigateToDetail: (CategoryDto) -> Unit
 ) {
     val context = LocalContext.current
     Box(
@@ -90,9 +90,9 @@ fun CategoriesScreen(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MealCategory(
-    category: Category,
+    category: CategoryDto,
     scope: SharedTransitionScope,
-    navigateToDetail: (Category) -> Unit
+    navigateToDetail: (CategoryDto) -> Unit
 ) {
     with(scope) {
         AnimatedVisibility(

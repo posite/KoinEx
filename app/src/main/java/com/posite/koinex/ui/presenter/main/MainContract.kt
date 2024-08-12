@@ -1,6 +1,6 @@
 package com.posite.koinex.ui.presenter.main
 
-import com.posite.koinex.data.remote.model.category.Category
+import com.posite.koinex.data.remote.dto.category.CategoryDto
 import com.posite.koinex.ui.presenter.base.UiEffect
 import com.posite.koinex.ui.presenter.base.UiEvent
 import com.posite.koinex.ui.presenter.base.UiState
@@ -17,7 +17,7 @@ class MainContract {
         object Success : CategoryListState()
         data class Visible(val visibility: Boolean) : CategoryListState()
         data class Error(val message: String) : CategoryListState()
-        data class Categories(val categories: List<Category>) : CategoryListState()
+        data class Categories(val categories: List<CategoryDto>) : CategoryListState()
     }
 
     sealed class CategoryEffect : UiEffect {

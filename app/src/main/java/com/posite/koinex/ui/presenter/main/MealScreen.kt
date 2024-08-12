@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.posite.koinex.data.remote.model.meal.Meal
+import com.posite.koinex.domain.model.meal.MealModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -93,7 +93,7 @@ fun MealScreen(
                         .padding(innerPadding)
                         .alpha(if (mealViewModel.currentState.visible.visibility) 1f else 0f)
                 ) {
-                    items(state.meals.meals) {
+                    items(state.meals.meals.meals) {
                         MealList(it)
                     }
                 }
@@ -128,7 +128,7 @@ fun MealScreen(
 }
 
 @Composable
-fun MealList(meal: Meal) {
+fun MealList(meal: MealModel) {
     Column(
         modifier = Modifier
             .padding(8.dp)

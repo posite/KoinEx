@@ -1,4 +1,4 @@
-package com.posite.koinex.util
+package com.posite.koinex.util.network
 
 import com.posite.koinex.KoinApplication
 import retrofit2.Response
