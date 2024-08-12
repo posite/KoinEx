@@ -1,4 +1,4 @@
-package com.posite.koinex.util
+package com.posite.koinex.util.network
 
 sealed class DataResult<out T> {
     data class Loading<T>(val data: T? = null) : DataResult<T>()
@@ -33,6 +33,13 @@ inline fun <T> DataResult<T>.onError(action: (Exception) -> Unit): DataResult<T>
 inline fun <T> DataResult<T>.onException(action: (Exception) -> Unit): DataResult<T> {
     if (this is DataResult.Error) {
         action(this.exception)
+    }
+    return this
+}
+
+inline fun <T> DataResult<T>.onLoading(action: () -> Unit): DataResult<T> {
+    if (this is DataResult.Loading) {
+        action()
     }
     return this
 }

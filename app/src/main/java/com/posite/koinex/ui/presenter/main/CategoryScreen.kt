@@ -2,13 +2,7 @@ package com.posite.koinex.ui.presenter.main
 
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,14 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.posite.koinex.data.remote.model.category.Category
+import com.posite.koinex.data.remote.dto.category.CategoryDto
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CategoriesScreen(
     viewModel: MainViewModel,
-    scope: SharedTransitionScope,
-    navigateToDetail: (Category) -> Unit
+    navigateToDetail: (CategoryDto) -> Unit
 ) {
     val context = LocalContext.current
     Box(
@@ -53,10 +46,10 @@ fun CategoriesScreen(
             columns = GridCells.Fixed(2),
             modifier = Modifier
                 .fillMaxSize()
-                .alpha(if (viewModel.currentState.visible.visibility) 1f else 0f)
+                .alpha(if (viewModel.currentState.loadState is MainContract.CategoryListState.Visible) 1f else 0f)
         ) {
             items(state.categories.categories) {
-                MealCategory(it, scope, navigateToDetail)
+                MealCategory(it, navigateToDetail)
             }
         }
         when (state.loadState) {
@@ -74,6 +67,14 @@ fun CategoriesScreen(
                 Log.d("MealCategories", "Before")
             }
 
+            is MainContract.CategoryListState.Visible -> {
+                Log.d("MealCategories", "Visible")
+            }
+
+            is MainContract.CategoryListState.Invisible -> {
+                Log.d("MealCategories", "Invisible")
+            }
+
             else -> {
                 Toast.makeText(
                     context,
@@ -87,48 +88,32 @@ fun CategoriesScreen(
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun MealCategory(
-    category: Category,
-    scope: SharedTransitionScope,
-    navigateToDetail: (Category) -> Unit
+    category: CategoryDto,
+    navigateToDetail: (CategoryDto) -> Unit
 ) {
-    with(scope) {
-        AnimatedVisibility(
-            visible = true,
-        ) {
+    Column(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxSize()
+            .clickable {
+                navigateToDetail(category)
+            },
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(category.strCategoryThumb)
+                .crossfade(true)
+                .build(),
+            contentDescription = category.strCategoryDescription
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = category.strCategory,
+            style = TextStyle(fontSize = 20.sp)
+        )
 
-            Column(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxSize()
-                    .sharedBounds(
-                        rememberSharedContentState(key = "category-${category.strCategory}"),
-                        animatedVisibilityScope = this@AnimatedVisibility,
-                        resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds(),
-                        enter = fadeIn() + scaleIn(),
-                        exit = fadeOut() + scaleOut()
-                    )
-                    .clickable {
-                        navigateToDetail(category)
-                    },
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(category.strCategoryThumb)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = category.strCategoryDescription
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = category.strCategory,
-                    style = TextStyle(fontSize = 20.sp)
-                )
-
-            }
-        }
     }
 }

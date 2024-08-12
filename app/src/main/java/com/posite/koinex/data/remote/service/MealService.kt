@@ -1,7 +1,7 @@
 package com.posite.koinex.data.remote.service
 
-import com.posite.koinex.data.remote.model.category.CategoryResponse
-import com.posite.koinex.data.remote.model.meal.MealResopnse
+import com.posite.koinex.data.remote.dto.category.CategoryResponse
+import com.posite.koinex.data.remote.dto.meal.MealResopnse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
