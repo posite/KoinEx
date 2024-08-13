@@ -25,13 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.posite.koinex.data.remote.dto.category.CategoryDto
+import com.posite.koinex.domain.model.category.CategoryModel
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CategoriesScreen(
     viewModel: MainViewModel,
-    navigateToDetail: (CategoryDto) -> Unit
+    navigateToDetail: (CategoryModel) -> Unit
 ) {
     val context = LocalContext.current
     Box(
@@ -90,8 +90,8 @@ fun CategoriesScreen(
 
 @Composable
 fun MealCategory(
-    category: CategoryDto,
-    navigateToDetail: (CategoryDto) -> Unit
+    category: CategoryModel,
+    navigateToDetail: (CategoryModel) -> Unit
 ) {
     Column(
         modifier = Modifier

@@ -2,12 +2,12 @@ package com.posite.koinex.ui.presenter.main
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.posite.koinex.domain.usecase.category.GetCategoriesUseCase
+import com.posite.koinex.domain.usecase.category.GetKtorCategoriesUseCase
 import com.posite.koinex.ui.presenter.base.BaseViewModel
 import com.posite.koinex.util.network.onSuccess
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val useCase: GetCategoriesUseCase) :
+class MainViewModel(private val useCase: GetKtorCategoriesUseCase) :
     BaseViewModel<MainContract.MainEvent, MainContract.CategoryState, MainContract.CategoryEffect>() {
     override fun createInitialState(): MainContract.CategoryState {
         return MainContract.CategoryState(

@@ -14,7 +14,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.posite.koinex.data.remote.dto.category.CategoryDto
+import com.posite.koinex.domain.model.category.CategoryModel
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -43,8 +43,8 @@ fun MainNavigation(
             //exitTransition = exitTransition
         ) {
             val category =
-                navController.previousBackStackEntry?.savedStateHandle?.get<CategoryDto>("category")
-                    ?: CategoryDto("", "", "")
+                navController.previousBackStackEntry?.savedStateHandle?.get<CategoryModel>("category")
+                    ?: CategoryModel("", "", "")
             Log.d("Detail", "category ${category.strCategory}")
             MealScreen(
                 category = category.strCategory,

@@ -6,7 +6,7 @@ import android.content.Context
 import androidx.annotation.StringRes
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.posite.koinex.di.KoinModule
+import com.posite.koinex.di.KtorModule
 import com.posite.koinex.util.network.NetworkChecker
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -22,10 +22,18 @@ class KoinApplication : Application(), DefaultLifecycleObserver {
         // 런타임에서 의존성 주입을 사용할 수 있도록 Application context와 Koin module 등록
         startKoin {
             androidContext(this@KoinApplication)
-            modules(KoinModule.mealNetworkModule)
-            modules(KoinModule.mealDataModule)
-            modules(KoinModule.mealDomainModule)
-            modules(KoinModule.mealViewModelModule)
+            /*modules(
+                KoinModule.mealNetworkModule,
+                KoinModule.mealDataModule,
+                KoinModule.mealDomainModule,
+                KoinModule.mealViewModelModule
+            )*/
+            modules(
+                KtorModule.mealNetworkModule,
+                KtorModule.mealDataModule,
+                KtorModule.mealDomainModule,
+                KtorModule.mealViewModelModule
+            )
         }
     }
 

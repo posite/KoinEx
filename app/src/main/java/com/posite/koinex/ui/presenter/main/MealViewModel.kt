@@ -3,12 +3,12 @@ package com.posite.koinex.ui.presenter.main
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.posite.koinex.domain.model.meal.MealsModel
-import com.posite.koinex.domain.usecase.meal.GetMealByCategoryUseCase
+import com.posite.koinex.domain.usecase.meal.GetKtorMealByCategoryUseCase
 import com.posite.koinex.ui.presenter.base.BaseViewModel
 import com.posite.koinex.util.network.onSuccess
 import kotlinx.coroutines.launch
 
-class MealViewModel(private val getMealsUseCase: GetMealByCategoryUseCase) :
+class MealViewModel(private val getMealsUseCase: GetKtorMealByCategoryUseCase) :
     BaseViewModel<MealContract.MealEvent, MealContract.MealState, MealContract.MealEffect>() {
     override fun createInitialState(): MealContract.MealState {
         return MealContract.MealState(

@@ -16,6 +16,8 @@ lifecycleViewmodelCompose = "2.8.0"
 navigationCompose = "2.8.0-beta05"
 coilCompose = "2.4.0"
 animation = "1.7.0-beta05"
+ktor-client = "2.3.12"
+kotlin-serialization = "1.6.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,9 +44,19 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animation" }
+ktor-bom = { group = "io.ktor", name = "ktor-bom", version.ref = "ktor-client" }
+ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktor-client" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor-client" }
+ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serialization", version.ref = "ktor-client" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor-client" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor-client" }
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor-client" }
+kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-serialization" }
+kotlinx-serialization = { id = "kotlinx-serialization" }
 
